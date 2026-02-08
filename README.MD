@@ -37,7 +37,14 @@ Just a simple project as a part of a test assignment. You could say that this is
 
 Install and run Docker on your computer
 
-### 2. Edit .env file
+### 2. Clone the repository
+
+```bash
+git clone https://github.com/middelmatigheid/filmizyan.git
+cd filmizyan
+```
+
+### 3. Edit .env file
 
 Create .env file in the main directory and set up the values
 
@@ -50,7 +57,7 @@ DB_HOST = localhost
 DB_PORT = 5433
 ```
 
-### 3. Build up the images
+### 4. Build up the images
 
 ```bash
 docker compose down -v
@@ -59,7 +66,7 @@ docker compose build --no-cache
 docker compose up
 ```
 
-### 4. The website is ready
+### 5. The api is ready
 
 The api would be available via http://localhost:8080/subscriptions/swagger/index.html
 
