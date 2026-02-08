@@ -52,9 +52,9 @@ Create .env file in the main directory and set up the values
 PORT = 8080
 DB_USER = postgres
 DB_PASSWORD = password 
-DB_NAME = pgdatabase
-DB_HOST = localhost
-DB_PORT = 5433
+DB_NAME = subscriptions
+DB_HOST = postgres
+DB_PORT = 5432
 ```
 
 ### 4. Build up the images
