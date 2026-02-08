@@ -40,7 +40,7 @@ Install and run Docker on your computer
 ### 2. Clone the repository
 
 ```bash
-git clone https://github.com/middelmatigheid/filmizyan.git
+git clone https://github.com/middelmatigheid/subscriptions-api.git
 cd filmizyan
 ```
 
