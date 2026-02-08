@@ -41,7 +41,7 @@ Install and run Docker on your computer
 
 ```bash
 git clone https://github.com/middelmatigheid/subscriptions-api.git
-cd filmizyan
+cd subscriptions-api
 ```
 
 ### 3. Edit .env file
