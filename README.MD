@@ -62,7 +62,7 @@ goose postgres "user=postgres password=password dbname=subscriptions host=localh
 goose postgres "user=postgres password=password dbname=subscriptions host=localhost port=5433" status -dir ./migrations
 ```
 
-### 3. The website is ready
+### 3. The api is ready
 
 The api would be available via http://localhost:8080/subscriptions/swagger/index.html
 
