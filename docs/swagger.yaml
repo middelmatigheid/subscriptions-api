@@ -1,0 +1,297 @@
+basePath: /subscriptions/
+definitions:
+  models.IDResponse:
+    properties:
+      id:
+        example: 1
+        type: integer
+    type: object
+  models.Subscription:
+    properties:
+      end_date:
+        example: 08-2025
+        type: string
+      id:
+        example: 1
+        type: integer
+      price:
+        example: 400
+        type: integer
+      service_name:
+        example: Yandex Plus
+        type: string
+      start_date:
+        example: 07-2025
+        type: string
+      user_uuid:
+        example: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        type: string
+    type: object
+  models.SubscriptionPatch:
+    properties:
+      end_date:
+        example: 08-2025
+        type: string
+      id:
+        example: 1
+        type: integer
+      price:
+        example: 400
+        type: integer
+      service_name:
+        example: Yandex Plus
+        type: string
+      start_date:
+        example: 07-2025
+        type: string
+      user_uuid:
+        example: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        type: string
+    type: object
+  models.SummaryResponse:
+    properties:
+      amount:
+        example: 1
+        type: integer
+      months:
+        example: 2
+        type: integer
+      total:
+        example: 400
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: It is a simple API to manage subscriptions
+  title: Subscriptions API
+  version: "1.0"
+paths:
+  /create:
+    post:
+      consumes:
+      - application/json
+      description: Inserts a new subscription to the database
+      parameters:
+      - description: Subscription data
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subscription'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.IDResponse'
+        "400":
+          description: Bad Request
+        "409":
+          description: Conflict
+        "500":
+          description: Internal Server Error
+      summary: Create a new subscription
+      tags:
+      - subscriptions
+  /delete:
+    delete:
+      description: Deletes subscription by its id or combination of user_uuid and
+        service_name
+      parameters:
+      - description: "1"
+        in: query
+        name: id
+        type: integer
+      - description: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        in: query
+        name: user_uuid
+        type: string
+      - description: Yandex Plus
+        in: query
+        name: service_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Delete subscription
+      tags:
+      - subscriptions
+  /list:
+    get:
+      consumes:
+      - application/json
+      description: Gest list of subscriptions filtered by user_uuid, service_name,
+        start_date and end_date
+      parameters:
+      - description: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        in: query
+        name: user_uuid
+        type: string
+      - description: Yandex Plus
+        in: query
+        name: service_name
+        type: string
+      - description: 07-2025
+        in: query
+        name: start_date
+        type: string
+      - description: 08-2025
+        in: query
+        name: end_date
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Subscription'
+            type: array
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get list of subscriptions
+      tags:
+      - subscriptions
+  /patch:
+    put:
+      consumes:
+      - application/json
+      description: Updates existing subscription partially
+      parameters:
+      - description: Updated subscription data
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.SubscriptionPatch'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Partial update subscription
+      tags:
+      - subscriptions
+  /read:
+    get:
+      consumes:
+      - application/json
+      description: Gets subscription by its id or combination of user_uuid and service_name
+      parameters:
+      - description: "1"
+        in: query
+        name: id
+        type: integer
+      - description: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        in: query
+        name: user_uuid
+        type: string
+      - description: Yandex Plus
+        in: query
+        name: service_name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Subscription'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get subscription information
+      tags:
+      - subscriptions
+  /summary:
+    get:
+      consumes:
+      - application/json
+      description: Get total amount of unique subscriptions and calculates its total
+        price within the provided perio. It is implied that both start_date and end_date
+        of subscription is being paid. The subscriptions can be filtered by user_id
+        or service_name
+      parameters:
+      - description: 60601fee-2bf1-4721-ae6f-7636e79a0cba
+        in: query
+        name: user_uuid
+        type: string
+      - description: Yandex Plus
+        in: query
+        name: service_name
+        type: string
+      - description: 07-2025
+        in: query
+        name: start_date
+        required: true
+        type: string
+      - description: 08-2025
+        in: query
+        name: end_date
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SummaryResponse'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Get total sum of subscriptions prices
+      tags:
+      - subscriptions
+  /update:
+    put:
+      consumes:
+      - application/json
+      description: Updates existing subscription by its id
+      parameters:
+      - description: Updated subscription data
+        in: body
+        name: subscription
+        required: true
+        schema:
+          $ref: '#/definitions/models.Subscription'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Update subscription
+      tags:
+      - subscriptions
+swagger: "2.0"

@@ -1,0 +1,65 @@
+services:
+  redis:
+    image: redis:7
+    container_name: subscriptions_redis
+    ports:
+      - "6379:${REDIS_PORT:-6379}"
+    volumes:
+      - logs:/logs
+      - redis_data:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - subscriptions-network
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: subscriptions-postgres
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-password}
+      POSTGRES_DB: ${DB_NAME:-subscriptions}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - subscriptions-network
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: subscriptions-api
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "${PORT:-8080}:8080"
+    volumes:
+      - logs:/logs
+    networks:
+      - subscriptions-network
+
+volumes:
+  redis_data:
+    driver: local
+  postgres_data:
+    driver: local
+  logs:
+    driver: local
+
+networks:
+  subscriptions-network:
+    driver: bridge
