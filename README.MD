@@ -42,8 +42,16 @@ It is a simple restful api for subscriptions management that was done within tes
 
 Install and run Docker on your computer
 
+### 2. Install the api
 
-### 2. Build up the images
+Clone the repository
+
+```bash
+git clone https://github.com/middelmatigheid/subscriptions-api.git
+cd subscriptions-api
+```
+
+### 3. Build up the images
 
 ```bash
 docker compose down -v
@@ -52,7 +60,7 @@ docker compose build --no-cache
 docker compose up
 ```
 
-### 2. Migrate the database using goose
+### 4. Migrate the database using goose
 
 Open new terminal and migrate the database
 
@@ -62,7 +70,7 @@ goose postgres "user=postgres password=password dbname=subscriptions host=localh
 goose postgres "user=postgres password=password dbname=subscriptions host=localhost port=5433" status -dir ./migrations
 ```
 
-### 3. The api is ready
+### 5. The api is ready
 
 The api would be available via http://localhost:8080/subscriptions/swagger/index.html
 
